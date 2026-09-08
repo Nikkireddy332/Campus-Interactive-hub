@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | Campus Hub</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: var(--glass);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .admin-table th,
+    .admin-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .admin-table th {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .admin-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge.admin {
+      background: rgba(168, 85, 247, 0.2);
+      color: #c084fc;
+    }
+
+    .badge.faculty {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+
+    .badge.student {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Campus Hub Admin</h2>
+    <ul class="nav-links">
+      <li class="nav-item">
+        <a href="#" class="nav-link active" onclick="showSection('overview')">
+          <i class="fas fa-microchip"></i> System Overview
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('users')">
+          <i class="fas fa-users-cog"></i> Manage Users
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('content')">
+          <i class="fas fa-bullhorn"></i> Content Moderation
+        </a>
+      </li>
+    </ul>
+
+    <button onclick="window.location.href='index.html'" class="nav-link" style="margin-bottom: 0.5rem;">
+      <i class="fas fa-home"></i> Home
+    </button>
+    <button onclick="logout()" class="nav-link logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header>
+      <div>
+        <h1>System Control Center</h1>
+        <p id="currentDate" style="color: var(--text-muted);"></p>
+      </div>
+    </header>
+
+    <!-- Overview View -->
+    <div id="overviewView">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Users</h3>
+          <p class="value" id="totalUsersCount">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Active Events</h3>
+          <p class="value" id="totalEventsCount">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Announcements</h3>
+          <p class="value" id="totalAnnouncementsCount">0</p>
+        </div>
+      </div>
+
+      <div class="content-grid" style="grid-template-columns: 1fr;">
+        <section class="feed-section">
+          <div class="section-header">
+            <h2>Campus Activity Hub</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Monitor and moderate live posts</p>
+          </div>
+          <div id="overviewActivityList" style="margin-top: 1rem;">
+            <!-- Loaded via admin.js -->
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Users View -->
+    <div id="usersView" style="display: none;">
+      <section class="feed-section">
+        <div class="section-header">
+          <h2>User Management</h2>
+          <button class="primary" style="width: auto;" onclick="alert('Manual user creation coming soon')">+ Add
+            User</button>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersList">
+            <!-- Loaded via admin.js -->
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <!-- Content View -->
+    <div id="contentView" style="display: none;">
+      <section class="feed-section">
+        <h2>Content Moderation</h2>
+        <div id="moderationList" style="margin-top: 1.5rem;">
+          <!-- Loaded via admin.js -->
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- Detail Modal -->
+  <div id="itemModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <div id="modalBody">
+        <span class="tag" id="modalTag"></span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription" style="margin: 1.5rem 0; line-height: 1.6; color: var(--text-main);"></p>
+        <div class="modal-footer">
+          <small id="modalAuthor"></small>
+          <small id="modalDate"></small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.getElementById('overviewView').style.display = section === 'overview' ? 'block' : 'none';
+      document.getElementById('usersView').style.display = section === 'users' ? 'block' : 'none';
+      document.getElementById('contentView').style.display = section === 'content' ? 'block' : 'none';
+
+      if (section === 'users') loadUsers();
+      if (section === 'content') loadModerationContent();
+    }
+  </script>
+</body>
+
+</html>

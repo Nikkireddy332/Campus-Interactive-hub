@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Portal | Campus Hub</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Campus Hub</h2>
+    <ul class="nav-links">
+      <li class="nav-item">
+        <a href="#" class="nav-link active" onclick="showSection('dashboard')">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('upload')">
+          <i class="fas fa-plus-circle"></i> Create Post
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('manage')">
+          <i class="fas fa-tasks"></i> My Uploads
+        </a>
+      </li>
+    </ul>
+
+    <button onclick="window.location.href='index.html'" class="nav-link" style="margin-bottom: 0.5rem;">
+      <i class="fas fa-home"></i> Home
+    </button>
+    <button onclick="logout()" class="nav-link logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header>
+      <div>
+        <h1 id="facultyWelcome">Faculty Dashboard</h1>
+        <p id="currentDate" style="color: var(--text-muted);"></p>
+      </div>
+    </header>
+
+    <!-- Dashboard View -->
+    <div id="dashboardView">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>My Total Posts</h3>
+          <p class="value" id="myPostsCount">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Ongoing Events</h3>
+          <p class="value" id="globalEventsCount">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Announcements</h3>
+          <p class="value" id="globalAnnouncementsCount">0</p>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <section class="feed-section">
+          <h2>Recent Activity</h2>
+          <div id="recentActivityList" style="margin-top: 1rem;">
+            <!-- Content loaded via faculty.js -->
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Upload View -->
+    <div id="uploadView" style="display: none;">
+      <div class="content-grid" style="grid-template-columns: 1fr;">
+        <div class="upload-card" style="max-width: 600px; margin: 0 auto; position: static;">
+          <h2>Create New Post</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Share events or announcements
+            with the campus.</p>
+
+          <form id="postForm">
+            <div class="form-group">
+              <label>Post Type</label>
+              <select id="postType" required>
+                <option value="announcement">Announcement</option>
+                <option value="event">Event</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" id="postTitle" placeholder="Enter title" required>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="postDescription" rows="5" placeholder="Enter details..." required></textarea>
+            </div>
+            <button type="submit" class="primary">Publish Now</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manage View -->
+    <div id="manageView" style="display: none;">
+      <section class="feed-section">
+        <h2>Manage My Uploads</h2>
+        <div id="myUploadsList" style="margin-top: 1.5rem;">
+          <!-- Content loaded via faculty.js -->
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- Detail Modal -->
+  <div id="itemModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <div id="modalBody">
+        <span class="tag" id="modalTag"></span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription" style="margin: 1.5rem 0; line-height: 1.6; color: var(--text-main);"></p>
+        <div class="modal-footer">
+          <small id="modalAuthor"></small>
+          <small id="modalDate"></small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="faculty.js"></script>
+  <script>
+    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.getElementById('dashboardView').style.display = section === 'dashboard' ? 'block' : 'none';
+      document.getElementById('uploadView').style.display = section === 'upload' ? 'block' : 'none';
+      document.getElementById('manageView').style.display = section === 'manage' ? 'block' : 'none';
+
+      if (section === 'manage') loadMyUploads();
+    }
+  </script>
+</body>
+
+</html>

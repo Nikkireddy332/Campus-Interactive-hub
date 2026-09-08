@@ -1,0 +1,40 @@
+<h2>Events</h2>
+<form id="eventForm">
+  <input type="text" id="title" placeholder="Event Title" required>
+  <textarea id="description" placeholder="Event Description"></textarea>
+  <input type="date" id="date" required>
+  <button type="submit">Post Event</button>
+</form>
+
+<div id="eventsList"></div>
+
+<script>
+const token = localStorage.getItem("token");
+
+document.getElementById("eventForm")?.addEventListener("submit", async e => {
+  e.preventDefault();
+  const title = document.getElementById("title").value;
+  const description = document.getElementById("description").value;
+  const date = document.getElementById("date").value;
+
+  const res = await fetch("http://localhost:5000/api/events/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ title, description, date })
+  });
+  const data = await res.json();
+  alert(data.message);
+  loadEvents();
+});
+
+async function loadEvents() {
+  const res = await fetch("http://localhost:5000/api/events", {
+    headers: { "Authorization": "Bearer " + token }
+  });
+  const events = await res.json();
+  const list = document.getElementById("eventsList");
+  list.innerHTML = events.map(e => `<p><strong>${e.title}</strong> by ${e.postedBy.name} on ${new Date(e.date).toLocaleDateString()}</p>`).join("");
+}
+
+loadEvents();
+</script>

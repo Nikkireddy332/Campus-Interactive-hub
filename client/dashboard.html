@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Campus Interactive Hub - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <h2>Campus Interactive Hub</h2>
+    <button onclick="window.location.href='index.html'">Home</button>
+    <button onclick="logout()">Logout</button>
+  </header>
+
+  <div class="container">
+    <h1 id="welcome"></h1>
+
+    <!-- Add Event Section -->
+    <div id="eventSection" style="display:none;">
+      <h2>Add Event</h2>
+      <input type="text" id="title" placeholder="Event Title">
+      <textarea id="description" placeholder="Event Description"></textarea>
+      <button onclick="addEvent()">Post Event</button>
+    </div>
+
+    <!-- Events List -->
+    <h2>All Events</h2>
+    <div id="events"></div>
+
+    <!-- Interaction Rules -->
+    <div class="rules">
+      <h3>Interaction Rules:</h3>
+      <ul>
+        <li>Students can interact with Students only.</li>
+        <li>Faculty can interact with Faculty only.</li>
+        <li>Faculty can share information with Students.</li>
+        <li>Students cannot directly message Faculty.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    if (!token) {
+      alert("Please login first");
+      window.location.href = "login.html";
+    } else {
+      // Auto-redirect to the professional portals
+      if (role === "student") window.location.href = "student.html";
+      else if (role === "faculty") window.location.href = "faculty.html";
+      else if (role === "admin") window.location.href = "admin.html";
+    }
+  </script>
+</body>
+
+</html>

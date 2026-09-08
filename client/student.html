@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal | Campus Hub</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Campus Hub</h2>
+    <ul class="nav-links">
+      <li class="nav-item">
+        <a href="#" class="nav-link active" onclick="showSection('dashboard')">
+          <i class="fas fa-th-large"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('announcements')">
+          <i class="fas fa-bullhorn"></i> Announcements
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('events')">
+          <i class="fas fa-calendar-alt"></i> Campus Events
+        </a>
+      </li>
+    </ul>
+
+    <button onclick="window.location.href='index.html'" class="nav-link" style="margin-bottom: 0.5rem;">
+      <i class="fas fa-home"></i> Home
+    </button>
+    <button onclick="logout()" class="nav-link logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header>
+      <div>
+        <h1 id="welcomeText">Student Dashboard</h1>
+        <p id="currentDate" style="color: var(--text-muted);"></p>
+      </div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Announcements</h3>
+        <p class="value" id="totalAnnouncementsCount">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Active Events</h3>
+        <p class="value" id="activeEventsCount">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Unread Notices</h3>
+        <p class="value" id="unreadNoticesCount">0</p>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- Live Feed -->
+      <section class="feed-section">
+        <div class="section-header">
+          <h2 id="sectionTitle">Campus Activity</h2>
+          <small id="postDate" style="color: var(--text-muted);"></small>
+        </div>
+        <div id="feedList">
+          <!-- Items will be loaded here -->
+          <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+            <p>Loading your profile and activity...</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Detail Modal -->
+  <div id="itemModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <div id="modalBody">
+        <span class="tag" id="modalTag"></span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription" style="margin: 1.5rem 0; line-height: 1.6; color: var(--text-main);"></p>
+        <div class="modal-footer">
+          <small id="modalAuthor"></small>
+          <small id="modalDate"></small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="student.js"></script>
+  <script>
+    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+
+    function showSection(section) {
+      const activeLink = document.querySelector('.nav-link.active');
+      if (activeLink) activeLink.classList.remove('active');
+
+      const title = document.getElementById('sectionTitle');
+      if (section === 'dashboard') title.innerText = 'Campus Activity';
+      if (section === 'announcements') title.innerText = 'Official Announcements';
+      if (section === 'events') title.innerText = 'Upcoming Events';
+
+      loadPage(section);
+    }
+  </script>
+</body>
+
+</html>

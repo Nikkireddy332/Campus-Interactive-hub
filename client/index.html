@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Campus Interaction Hub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="home">
+
+  <div class="header-branding">
+    <img src="colloege_logo.png" alt="SREC Logo" class="college-logo">
+    <div class="college-info">
+      <h1 class="college-name">Santhiram Engineering College</h1>
+      <p class="college-location">Nandyal, Andhra Pradesh</p>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>CAMPUS<br>INTERACTION HUB</h1>
+    <p>Select your access level to proceed</p>
+  </div>
+
+  <div class="roles">
+    <div class="card" onclick="goToLogin('student')">
+      <h2>STUDENT</h2>
+      <p>Submit & track requests</p>
+    </div>
+
+    <div class="card" onclick="goToLogin('faculty')">
+      <h2>FACULTY</h2>
+      <p>Manage & respond</p>
+    </div>
+
+    <div class="card" onclick="goToLogin('admin')">
+      <h2>ADMIN</h2>
+      <p>System oversight</p>
+    </div>
+  </div>
+
+  <script>
+    function goToLogin(role) {
+      localStorage.setItem("selectedRole", role);
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+
+</html>
